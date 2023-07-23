@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--Mapper代理开发-->
+<mapper namespace="x.y.z.mapper.BrandMapper">
+    <!-- resultMap定义字段映射,只用定义不一样的字段 -->
+    <resultMap id="brandResultMap" type="x.y.z.domain.Brand">
+        <result column="brand_name" property="brandName"/>
+        <result column="company_name" property="companyName"/>
+    </resultMap>
+
+    <select id="getAll" resultMap="brandResultMap">
+        select * from tb_brand;
+    </select>
+
+    <!-- parameterType="int" 可以省略-->
+    <!-- #{}可以防止SQL注入, ${}会拼SQL,存在SQL注入问题-->
+    <select id="getById" resultMap="brandResultMap">
+        select * from tb_brand where id = #{id};
+    </select>
+
+    <select id="selectByCondition" resultMap="brandResultMap">
+        select *
+        from tb_brand
+        <where>
+            <if test="status!=null">
+                and status = #{status}
+            </if>
+            <if test="companyName != null and companyName != ''">
+                and company_name like concat('%',#{companyName},'%')
+            </if>
+            <if test="brandName != null and brandName != ''">
+                and brand_name like concat('%',#{brandName},'%')
+            </if>
+        </where>
+    </select>
+    <select id="selectByConditionSingle" resultMap="brandResultMap">
+        select *
+        from tb_brand
+       <where>
+           <choose>
+               <when test="status!=null">
+                   status = #{status}
+               </when>
+               <when test="companyName != null and companyName != ''">
+                   company_name like concat('%',#{companyName},'%')
+               </when>
+               <when test="brandName != null and brandName != ''">
+                   brand_name like concat('%',#{brandName},'%')
+               </when>
+               <!-- 使用where标签,mybatis会自动处理语法错误 -->
+<!--               <otherwise>-->
+<!--                   1=1-->
+<!--               </otherwise>-->
+           </choose>
+       </where>
+    </select>
+
+    <!--应用场景：在数据添加成功后，需要获取擦汗如数据库数据主键的值 -->
+    <!--useGeneratedKeys="true" keyProperty="id" 用来设置主键返回,keyProperty设置Id主键的名称 -->
+    <insert id="add" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_brand(brand_name,company_name,ordered,description,status)
+        values(#{brandName},#{companyName},#{ordered},#{description},#{status});
+    </insert>
+
+    <update id="update">
+        update tb_brand
+        <set>
+            <if test="status!=null">
+                status =#{status},
+            </if>
+            <if test="ordered!=null">
+                ordered =#{ordered},
+            </if>
+            <if test="companyName != null and companyName != ''">
+                brand_name =#{brandName},
+            </if>
+            <if test="brandName != null and brandName != ''">
+                brand_name =#{brandName},
+            </if>
+            <if test="description != null and description != ''">
+                description =#{description},
+            </if>
+        </set>
+        where id = #{id};
+    </update>
+
+    <delete id="deleteById">
+        delete from tb_brand where id = #{id};
+    </delete>
+
+    <delete id="deleteByIds">
+        delete from tb_brand where id in
+        <!-- 如果不用Param注解,mybatis默认会将数组参数，封装为一个Map集合,map集合的key为array,值为数组(ids要换成array) -->
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

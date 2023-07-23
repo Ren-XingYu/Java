@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <typeAliases>
+        <!-- 相当于给x.y.z.domain下面的pojo类起了一个别名,默认为类名(不区分大小写) -->
+        <!-- before:x.y.z.User now:user User ... -->
+        <package name="x.y.z.domain"/>
+    </typeAliases>
+
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://ip:port/ssm?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;useServerPrepStmts=true"/>
+                <property name="username" value="root"/>
+                <property name="password" value="root"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <!-- 普通开发方式：mapper文件放在mybatis核心配置文件同级目录-->
+        <!-- <mapper resource="UserMapper.xml"/>-->
+
+        <!-- mapper代理开发：mapper文件放在Mapper接口同级目录-->
+        <!--<mapper resource="x/y/z/mapper/UserMapper.xml"/>-->
+
+        <!-- 如果mapper接口名称和sql映射文件名称相同,并在同一目录,则可以使用包扫描的方式简化SQL映射文件的加载(mapper代理开发方式) -->
+        <package name="x.y.z.mapper"/>
+    </mappers>
+</configuration>

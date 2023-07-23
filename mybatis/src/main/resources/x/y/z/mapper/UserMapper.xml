@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--普通方式开发-->
+<!--<mapper namespace="UserMapper">-->
+<!--    <select id="selectAll" resultType="x.y.z.domain.User">-->
+<!--        select * from tb_user;-->
+<!--    </select>-->
+<!--</mapper>-->
+
+<!--Mapper代理开发: namespace属性为Mapper接口的全限定名-->
+<mapper namespace="x.y.z.mapper.UserMapper">
+    <!-- 因为配置了别名,所以可以这样用 -->
+<!--    <select id="selectAll" resultType="x.y.z.domain.User">-->
+<!--        select * from tb_user;-->
+<!--    </select>-->
+    <select id="selectAll" resultType="user">
+        select * from tb_user;
+    </select>
+    <select id="select" resultType="x.y.z.domain.User">
+        select * from tb_user where username=#{username} and password=#{param2};
+    </select>
+</mapper>
