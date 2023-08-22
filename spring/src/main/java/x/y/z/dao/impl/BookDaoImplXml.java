@@ -22,6 +22,17 @@ public class BookDaoImplXml implements BookDao {
         System.out.println("book dao save.");
     }
 
+    @Override
+    public void update() {
+        System.out.println("book dao update.");
+    }
+
+    @Override
+    public int select() {
+        System.out.println("book dao select.");
+        return 0;
+    }
+
     public void init(){
         System.out.println("book dao init.");
     }

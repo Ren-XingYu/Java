@@ -20,6 +20,17 @@ public class BookDaoImplAnnotation2 implements BookDao {
         System.out.println("book dao2 save.");
     }
 
+    @Override
+    public void update() {
+        System.out.println("book dao2 update.");
+    }
+
+    @Override
+    public int select() {
+        System.out.println("book dao2 select.");
+        return 200;
+    }
+
     @PostConstruct
     public void init(){
         System.out.println("book dao2 init.");

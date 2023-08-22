@@ -69,4 +69,14 @@ public class SpringTest {
         DataSource dataSource = context.getBean(DataSource.class);
         System.out.println(dataSource);
     }
+
+    @Test
+    public void testAop(){
+        ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+        BookDao bookDao = context.getBean("bookDao",BookDao.class);
+        System.out.println(bookDao);
+        System.out.println(bookDao.getClass());
+        bookDao.update();
+        System.out.println(bookDao.select());
+    }
 }
