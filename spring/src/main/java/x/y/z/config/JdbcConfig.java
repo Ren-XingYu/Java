@@ -20,7 +20,7 @@ public class JdbcConfig {
     @Value("${jdbc.url}")
     private String url;
 
-    @Value("{jdbc.driverClassName}")
+    @Value("${jdbc.driverClassName}")
     private String driverClass;
 
     // 管理第三方Bean
