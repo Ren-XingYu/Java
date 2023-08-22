@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- 加载properties文件 system-properties-mode="NEVER"-不加载系统环境变量的值 classpath*:不仅读取当前工程的properties文件,还读取jar包中的properties文件-->
+    <context:property-placeholder location="classpath*:*.properties"/>
+
+    <!-- spring的Bean默认单例(scope="singleton") lazy-init="true"-延迟加载-->
+    <bean id="bookDao" name="dao" class="x.y.z.dao.impl.BookDaoImplXml" scope="singleton" init-method="init" destroy-method="destroy">
+        <!-- 和构造方法的参数名称耦合 -->
+<!--        <constructor-arg name="connectionNumber" value="10"/>-->
+<!--        <constructor-arg name="databaseName" value="mysql"/>-->
+
+        <!-- 通过类型判断(不推荐):和构造方法的参数解耦 -->
+<!--        <constructor-arg type="java.lang.Integer" value="10"/>-->
+<!--        <constructor-arg type="java.lang.String" value="mysql"/>-->
+
+        <!-- 通过参数位置判断(不推荐):和构造方法的参数解耦 -->
+        <constructor-arg index="0" value="10"/>
+        <constructor-arg index="1" value="mysql"/>
+    </bean>
+
+    <bean id="bookService" name="service" class="x.y.z.service.impl.BookServiceImplXml">
+        <!-- set方法注入 -->
+<!--        <property name="bookDao" ref="bookDao"/>-->
+        <!-- 构造方法注入 -->
+        <constructor-arg name="bookDao" ref="bookDao"/>
+    </bean>
+
+    <!-- Bean的自动注入:自动注入的优先级低于setter注入与构造器注入 -->
+<!--    <bean id="bookService" name="service" class="x.y.z.service.impl.BookServiceImplXml" autowire="byType">-->
+
+    <!-- 使用静态工厂实例化Bean -->
+    <bean id="orderDao" class="x.y.z.factory.OrderDaoFactory" factory-method="getOrderDao"/>
+
+    <!-- 使用实例工厂实例化Bean -->
+<!--    <bean id="userDaoFactory" class="x.y.z.factory.UserDaoFactory"/>-->
+<!--    <bean id="userDao" factory-bean="userDaoFactory" factory-method="getUserDao"/>-->
+
+    <!-- 使用FactoryBean实例化Bean:实例工厂实例化Bean的简化方式 -->
+    <bean id="userDao" class="x.y.z.factory.UserDaoFactoryBean"/>
+
+    <!-- 集合注入演示 -->
+    <bean id="collectionInjection" class="x.y.z.CollectionInjection">
+        <property name="array">
+            <array>
+                <value>10</value>
+            </array>
+        </property>
+        <property name="list">
+            <list>
+                <value>list</value>
+            </list>
+        </property>
+        <property name="set">
+            <set>
+                <value>set</value>
+            </set>
+        </property>
+        <property name="map">
+            <map>
+                <entry key="name" value="zhangsan"/>
+            </map>
+        </property>
+        <property name="properties">
+            <props>
+                <prop key="name">zhangsan</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.url}"/>
+    </bean>
+</beans>
