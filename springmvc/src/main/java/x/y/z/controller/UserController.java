@@ -14,7 +14,7 @@ import java.util.List;
 //@Controller + @ResponseBody -> @RestController;
 @Controller
 //@ResponseBody
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
     // 普通参数
